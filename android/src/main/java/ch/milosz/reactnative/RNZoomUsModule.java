@@ -145,8 +145,11 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
       final MeetingService meetingService = zoomSDK.getMeetingService();
 
       JoinMeetingOptions opts = new JoinMeetingOptions();
-
-      opts.no_driving_mode = true;                            
+      
+      opts.no_dial_in_via_phone = true;
+      opts.no_dial_out_to_phone = true;
+      opts.no_disconnect_audio = true;
+      opts.no_driving_mode = true;                        
       opts.no_invite = true;
       opts.no_share = true;
       opts.invite_options = InviteOptions.INVITE_DISABLE_ALL;
