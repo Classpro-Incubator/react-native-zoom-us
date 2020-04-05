@@ -154,7 +154,9 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
       opts.no_invite = true;
       opts.no_share = true;
       opts.invite_options = InviteOptions.INVITE_DISABLE_ALL;
-      opts.meeting_views_options = MeetingViewsOptions.NO_BUTTON_SHARE + MeetingViewsOptions.NO_TEXT_MEETING_ID;
+      opts.meeting_views_options = MeetingViewsOptions.NO_BUTTON_SHARE + 
+          MeetingViewsOptions.NO_TEXT_MEETING_ID + 
+          MeetingViewsOptions.NO_TEXT_PASSWORD;
 
       JoinMeetingParams params = new JoinMeetingParams();
 
