@@ -234,6 +234,11 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
     unregisterListener();
   }
 
+  @Override
+  public void onZoomAuthIdentityExpired() {
+    unregisterListener()
+  }
+
   // React LifeCycle
   @Override
   public void onHostDestroy() {
