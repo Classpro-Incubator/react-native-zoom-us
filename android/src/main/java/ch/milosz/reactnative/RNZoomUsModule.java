@@ -131,6 +131,7 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
   public void joinMeeting(
     final String displayName,
     final String meetingNo,
+    final String meetingPassword,
     Promise promise
   ) {
     try {
@@ -159,6 +160,9 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
 
       params.displayName = displayName;
       params.meetingNo = meetingNo;
+      if(meetingPassword != null && meetingPassword != "") {
+        params.meetingPassword = meetingPassword;
+      }
 
       int joinMeetingResult = meetingService.joinMeetingWithParams(reactContext.getCurrentActivity(), params, opts);
       Log.i(TAG, "joinMeeting, joinMeetingResult=" + joinMeetingResult);
