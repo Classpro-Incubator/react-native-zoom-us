@@ -236,7 +236,7 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
 
   @Override
   public void onZoomAuthIdentityExpired() {
-    unregisterListener()
+    unregisterListener();
   }
 
   // React LifeCycle
