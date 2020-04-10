@@ -3,92 +3,102 @@
 //  MobileRTC
 //
 //  Created by Robust Hu on 7/2/15.
-//  Copyright (c) 2015 Zoom Video Communications, Inc. All rights reserved.
+//  Copyright (c) 2019 Zoom Video Communications, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 /*!
  @class MobileRTCMeetingSettings
- @brief MobileRTCMeetingSettings is designed for changing some settings for meeting.
+ @brief Set to modify the configurations of the meeting.
  */
 @interface MobileRTCMeetingSettings : NSObject
 
 /*!
- @brief Show/Hide meeting ID and meeting password in the meeting bar.
+ @brief Show/Hide meeting title in the meeting bar. 
  */
 @property (assign, nonatomic) BOOL meetingTitleHidden;
 
 /*!
- @brief Show/Hide meeting password in the meeting bar.
+ @brief Show/Hide meeting title in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingPasswordHidden;
 
 /*!
- @brief Show/Hide the "End/Leave Meeting" button in the meeting bar.
+ @brief Show/Hide the END/LEAVE MEETING button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingLeaveHidden;
 
 /*!
- @brief Show/Hide Audio button in the meeting bar.
+ @brief Show/Hide AUDIO button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingAudioHidden;
 
 /*!
- @brief Show/Hide Video button in the meeting bar.
+ @brief Show/Hide VIDEO button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingVideoHidden;
 
 /*!
- @brief Show/Hide Invite button in the meeting bar.
+ @brief Show/Hide INVITE button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingInviteHidden;
 
 /*!
- @brief Show/Hide Participant button in the meeting bar.
+ @brief Show/Hide Chat in the meeting bar.
+ */
+@property (assign, nonatomic) BOOL meetingChatHidden;
+
+/*!
+ @brief Show/Hide PARTICIPANT button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingParticipantHidden;
 
 /*!
- @brief Show/Hide Share button in the meeting bar.
+ @brief Show/Hide SHARE button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingShareHidden;
 
 /*!
- @brief Show/Hide More button in the meeting bar.
+ @brief Show/Hide MORE button in the meeting bar.
  */
 @property (assign, nonatomic) BOOL meetingMoreHidden;
 
 /*!
- @brief Show/Hide Top Bar in the meeting.
+ @brief Show/Hide the BAR ON THE TOP of view in the meeting.
  */
 @property (assign, nonatomic) BOOL topBarHidden;
 
 /*!
- @brief Show/Hide Bottom Bar in the meeting.
- @warning The Bottom Bar is just available in iPhone.
+ @brief Show/Hide BAR at the bottom of the view in the meeting.
+ @warning The BAR at the bottom of the view is available on iPhone.
  */
 @property (assign, nonatomic) BOOL bottomBarHidden;
 
 /*!
+ @brief Show/Hide disconnect audio button
+ */
+@property (assign, nonatomic) BOOL disconnectAudioHidden;
+
+/*!
  @brief Enable/Disable Kubi Device in the meeting.
- @warning The option is just available in iPad for using Kubi device.
+ @warning The option is available only on iPad if you want to use Kubi device. 
  */
 @property (assign, nonatomic) BOOL enableKubi;
 
 /*!
- @brief change thumbnail video layout while viewing share in the meeting.
- @discussion YES, the share content will be shrinked and thumbnail video will be shown in the right side in Landscape, or in the bottom side in Portrait; NO, the share content will still in fullscreen mode, the thumbnail video will keep the same as what Zoom iOS app did.
+ @brief Change thumbnail video layout while viewing a share in the meeting.
+ @warning If you set it to YES, the video of attendees will be placed at right of the Landscape(the device screen is oriented horizontally) or the bottom of Portrait(the device screen is oriented vertically) apart from the shared content, which means the video won't cover the content; if you set to NO, it will show only the video of active speaker and the video will be placed in the bottom right of the screen.
  */
 @property (assign, nonatomic) BOOL thumbnailInShare;
 
 /*!
- @brief Show/Hide "Leave Meeting" item in host side.
+ @brief Show/Hide LEAVE MEETING item for the host.
  */
 @property (assign, nonatomic) BOOL hostLeaveHidden;
 
 /*!
- @brief Show/Hide the hint message in meeting.
+ @brief Show/Hide the hint message in the meeting.
  */
 @property (assign, nonatomic) BOOL hintHidden;
 
@@ -98,94 +108,169 @@
 @property (assign, nonatomic) BOOL waitingHUDHidden;
 
 /*!
+ @brief Show/Hide "Call in Room System" item in Invite h.323/SIP Room System.
+ */
+@property (assign, nonatomic) BOOL callinRoomSystemHidden;
+
+/*!
  @brief Show/Hide "Call out Room System" item in Invite h.323/SIP Room System.
  */
 @property (assign, nonatomic) BOOL calloutRoomSystemHidden;
 
 /*!
- @brief Show/Hide "Enter Host Key to Claim Host" item in More Menu.
+ @brief Show/Hide "Enter Host Key to Claim Host" item in Menu More.
  */
 @property (assign, nonatomic) BOOL claimHostWithHostKeyHidden;
 
 /*!
- @brief Show/Hide Close Caption in a meeting.
+ @brief Show/Hide CLOSE CAPTION in a meeting.
  */
 @property (assign, nonatomic) BOOL closeCaptionHidden;
 
 /*!
- @brief Enable Csutom In-Meeting UI in meeting.
+ @brief Show/Hide Q&A button in webinar meeting.
+ */
+@property (assign, nonatomic) BOOL qaButtonHidden;
+
+/*!
+ @brief Enable/Disable Proximity Sensors Monitoring in a meeting. 
+ */
+@property (assign, nonatomic) BOOL proximityMonitoringDisable;
+
+/*!
+ @brief Enable Custom In-Meeting UI in meeting.
  */
 @property (assign, nonatomic) BOOL enableCustomMeeting;
 /*!
- @brief To check whether client join meeting with Internet audio or not.
- @return YES if auto connect internet audio, or return NO.
+ @brief Query if the user joins meeting with audio device. 
+ @return YES means the audio device is automatically connected, otherwise not. 
  */
 - (BOOL)autoConnectInternetAudio;
 
 /*!
- @brief Set the option of auto connect internet audio.
- @param connected the option value.
+ @brief Set to auto-connect the audio when user joins meeting. 
+ @param connected The option value.
  */
 - (void)setAutoConnectInternetAudio:(BOOL)connected;
 
 /*!
- @brief To check whether client will mute internet audio after joined meeting or not.
- @return YES if muted audio, or return NO.
+ @brief Query if user's audio is muted when he joins the meeting. 
+ @return YES means muted, otherwise not.
  */
 - (BOOL)muteAudioWhenJoinMeeting;
 
 /*!
- @brief To check whether client will mute internet audio after joined meeting or not.
- @param muted the option value.
+ @brief Set to mute user's audio when he joins the meeting. 
+ @param muted YES means to mute the audio, otherwise not.
  */
 - (void)setMuteAudioWhenJoinMeeting:(BOOL)muted;
 
 /*!
- @brief To check whether client will mute video after joined meeting or not.
- @return YES if muted video, or return NO.
+ @brief Query if user's video is muted when he joins the meeting. 
+ @return YES means muted, otherwise not.
  */
 - (BOOL)muteVideoWhenJoinMeeting;
 
 /*!
- @brief Set the option of mute video after joined meeting.
- @param muted the option value.
+ @brief Set to mute user's video when he joins the meeting. 
+ @param muted YES means to mute the video, otherwise not.
  */
 - (void)setMuteVideoWhenJoinMeeting:(BOOL)muted;
 
 /*!
- @brief To check whether client disabled Driving Mode or not.
- @return YES if disabled, or return NO.
+ @brief Query Touch up my appearance enable or not
+ @param muted YES means enable, otherwise not.
+ */
+- (BOOL)faceBeautyEnabled;
+
+/*!
+ @brief Set Touch up my appearance enable or not
+ @param muted YES means successful, otherwise not.
+ */
+- (void)setFaceBeautyEnabled:(BOOL)enable;
+
+/*!
+ @brief Query if driving mode is disabled.
+ @return YES means muted, otherwise not.
  */
 - (BOOL)driveModeDisabled;
 
 /*!
- @brief Set the option of disabled Driving mode in meeting.
- @param disabled  the option value.
+ @brief Set to disable the Driving mode in the meeting.
+ @param disabled YES means disabled, otherwise not.
  */
 - (void)disableDriveMode:(BOOL)disabled;
 
 /*!
- @brief To check whether client disabled Call In or not.
- @return YES if disabled, or return NO.
+ @brief Query if Gallery View is disabled.
+ @return YES means muted, otherwise not.
+ */
+- (BOOL)galleryViewDisabled;
+
+/*!
+ @brief Set to disable the Gallery View in the meeting.
+ @param disabled YES means disabled, otherwise not.
+ */
+- (void)disableGalleryView:(BOOL)disabled;
+
+/*!
+ @brief Query if it is disabled to call in.
+ @return YES means disabled, otherwise not.
  */
 - (BOOL)callInDisabled;
 
 /*!
- @brief To check whether client disabled Call In or not.
- @param disabled the option value.
+ @brief Set to disable the incoming calls.
+ @param disabled The option value.
  */
 - (void)disableCallIn:(BOOL)disabled;
 
 /*!
- @brief To check whether client disabled Call Out or not.
- @return YES if disabled, or return NO.
+ @brief Query if it is disabled to call out.
+ @return YES means disabled, otherwise not.
  */
 - (BOOL)callOutDisabled;
 
 /*!
- @brief Set the option of disabled Call Out in meeting.
- @param disabled the option value.
+ @brief Set to disable the outgoing calls. 
+ @param disabled The option value.
  */
 - (void)disableCallOut:(BOOL)disabled;
+
+/*!
+ @brief Query if it is disabled to Minimize Meeting.
+ @return YES means disabled, otherwise not.
+ */
+- (BOOL)minimizeMeetingDisabled;
+
+/*!
+ @brief Set to disable the Minimize Meeting.
+ @param disabled The option value.
+ */
+- (void)disableMinimizeMeeting:(BOOL)disabled;
+
+/*!
+ @brief Query Meeting setting of speaker off when present meeting.
+ @return YES means speaker off, otherwise not.
+ */
+- (BOOL)speakerOffWhenInMeeting;
+
+/*!
+ @brief Set speaker off.  Default value is No, Need set to NO when not used.
+ @param YES means speaker off, otherwise not
+ */
+- (void)setSpeakerOffWhenInMeeting:(BOOL)speakerOff;
+
+/*!
+ @brief Query show meeting elapse time.
+ @return YES means show meeting elapse time, otherwise not.
+ */
+- (BOOL)showMyMeetingElapseTime;
+
+/*!
+ @brief Enable show meeting elapse time.
+ @param enable YES means show meeting elapse time, otherwise not.
+ */
+- (void)enableShowMyMeetingElapseTime:(BOOL)enable;
 
 @end
