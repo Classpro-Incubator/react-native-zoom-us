@@ -109,6 +109,7 @@ RCT_EXPORT_METHOD(
 RCT_EXPORT_METHOD(
   joinMeeting: (NSString *)displayName
   withMeetingNo: (NSString *)meetingNo
+  withPassword: (NSString *)password
   withResolve: (RCTPromiseResolveBlock)resolve
   withReject: (RCTPromiseRejectBlock)reject
 )
@@ -123,7 +124,8 @@ RCT_EXPORT_METHOD(
 
       NSDictionary *paramDict = @{
         kMeetingParam_Username: displayName,
-        kMeetingParam_MeetingNumber: meetingNo
+        kMeetingParam_MeetingNumber: meetingNo,
+        kMeetingParam_MeetingPassword: password
       };
 
       MobileRTCMeetError joinMeetingResult = [ms joinMeetingWithDictionary:paramDict];
