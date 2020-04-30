@@ -6,6 +6,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.LifecycleEventListener;
 
 import us.zoom.sdk.ZoomSDK;
@@ -48,7 +49,7 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
   }
 
   @ReactMethod
-  public void initialize(final String appKey, final String appSecret, final String webDomain, final Promise promise) {
+  public void initialize(final ReadableMap initParams, final Promise promise) {
     if (isInitialized) {
       promise.resolve("Already initialize Zoom SDK successfully.");
       return;
@@ -62,8 +63,13 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
       reactContext.getCurrentActivity().runOnUiThread(new Runnable() {
           @Override
           public void run() {
+            ZoomSDKInitParams params = new ZoomSDKInitParams();
+            params.appKey = initParams.getString("appKey");
+            params.appSecret = initParams.getString("appSecret");
+            params.domain = initParams.getString("domain");
+
             ZoomSDK zoomSDK = ZoomSDK.getInstance();
-            zoomSDK.initialize(reactContext.getCurrentActivity(), appKey, appSecret, webDomain, RNZoomUsModule.this);
+            zoomSDK.initialize(reactContext.getCurrentActivity(),RNZoomUsModule.this, params);
           }
       });
     } catch (Exception ex) {
@@ -129,9 +135,8 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
 
   @ReactMethod
   public void joinMeeting(
-    final String displayName,
-    final String meetingNo,
-    final String meetingPassword,
+    ReadableMap joinMeetingParams,
+    ReadableMap joinMeetingOptions,
     Promise promise
   ) {
     try {
@@ -143,30 +148,34 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
         return;
       }
 
-      final MeetingService meetingService = zoomSDK.getMeetingService();
-
       JoinMeetingOptions opts = new JoinMeetingOptions();
-      
-      opts.no_dial_in_via_phone = true;
-      opts.no_dial_out_to_phone = true;
-      opts.no_disconnect_audio = true;
-      opts.no_driving_mode = true;                        
-      opts.no_invite = true;
-      opts.no_share = true;
-      opts.invite_options = InviteOptions.INVITE_DISABLE_ALL;
-      opts.meeting_views_options = MeetingViewsOptions.NO_BUTTON_SHARE + 
-          MeetingViewsOptions.NO_TEXT_MEETING_ID + 
-          MeetingViewsOptions.NO_TEXT_PASSWORD;
+      // opts.custom_meeting_id = joinMeetingOptions.getString("custom_meeting_id");
+      opts.invite_options = joinMeetingOptions.getInt("invite_options");
+      opts.meeting_views_options = joinMeetingOptions.getInt("meeting_views_options");
+      opts.no_bottom_toolbar = joinMeetingOptions.getBoolean("no_bottom_toolbar");
+      opts.no_dial_in_via_phone = joinMeetingOptions.getBoolean("no_dial_in_via_phone");
+      opts.no_dial_out_to_phone = joinMeetingOptions.getBoolean("no_dial_out_to_phone");
+      opts.no_disconnect_audio = joinMeetingOptions.getBoolean("no_disconnect_audio");
+      opts.no_driving_mode = joinMeetingOptions.getBoolean("no_driving_mode");
+      opts.no_invite = joinMeetingOptions.getBoolean("no_invite");
+      opts.no_meeting_end_message = joinMeetingOptions.getBoolean("no_meeting_end_message");
+      opts.no_meeting_error_message = joinMeetingOptions.getBoolean("no_meeting_error_message");
+      opts.no_share = joinMeetingOptions.getBoolean("no_share");
+      opts.no_titlebar = joinMeetingOptions.getBoolean("no_titlebar");
+      opts.no_unmute_confirm_dialog = joinMeetingOptions.getBoolean("no_unmute_confirm_dialog");
+      opts.no_video = joinMeetingOptions.getBoolean("no_video");
+      opts.no_webinar_register_dialog = joinMeetingOptions.getBoolean("no_webinar_register_dialog");
+      // opts.participant_id = joinMeetingOptions.getString("participant_id");
 
       JoinMeetingParams params = new JoinMeetingParams();
+      params.displayName = joinMeetingParams.getString("displayName");
+      params.meetingNo = joinMeetingParams.getString("meetingNo");
+      params.password = joinMeetingParams.getString("password");
+      // params.vanityID = joinMeetingParams.getString("vanityID");
 
-      params.displayName = displayName;
-      params.meetingNo = meetingNo;
-      if(meetingPassword != null && meetingPassword != "") {
-        params.password = meetingPassword;
-      }
-
+      final MeetingService meetingService = zoomSDK.getMeetingService();
       int joinMeetingResult = meetingService.joinMeetingWithParams(reactContext.getCurrentActivity(), params, opts);
+
       Log.i(TAG, "joinMeeting, joinMeetingResult=" + joinMeetingResult);
 
       if (joinMeetingResult != MeetingError.MEETING_ERROR_SUCCESS) {
