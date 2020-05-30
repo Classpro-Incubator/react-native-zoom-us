@@ -3,19 +3,58 @@
 
 This is a minimum bridge of https://github.com/zoom/zoom-sdk-android and https://github.com/zoom/zoom-sdk-ios
 
+## Usage
+```javascript
+import ZoomUs from 'react-native-zoom-us';
+
+await ZoomUs.initialize(
+  config.zoom.appKey,
+  config.zoom.appSecret,
+  config.zoom.domain
+);
+
+
+ZoomUs.removeAllListeners();
+
+ZoomUs.addListener(ZoomUs.eventType.MeetingStatus, (event) => {
+  if(event.status === ZoomUs.MeetingStatus.CONNECTED) {
+    // do stuff when user joined meeting
+  }
+
+  if(event.status == ZoomUs.MeetingStatus.DISCONNECTED) {
+    // do stuff when user left meeting
+  }
+});
+
+
+// Start Meeting
+await ZoomUs.startMeeting(
+  displayName,
+  meetingNo,
+  userId, // can be 'null'?
+  userType, // for pro user use 2
+  zoomAccessToken, // zak token
+  zoomToken // can be 'null'?
+
+  // NOTE: userId, userType, zoomToken should be taken from user hosting this meeting (not sure why it is required)
+  // But it works with putting only zoomAccessToken
+);
+
+// OR Join Meeting
+await ZoomUs.joinMeeting(
+  displayName,
+  meetingNo
+);
+```
+
+
 Tested on XCode 9.4.1 and node 10.14.1.
 
 Pull requests are welcome.
 
-## Getting started
+# Setup
 
-`$ npm install react-native-zoom-us`
-
-### Mostly automatic installation
-
-`$ react-native link react-native-zoom-us`
-
-#### Extra steps for Android
+#### Android
 
 Since Zoom SDK `*.aar` libraries are not globally distributed
 it is also required to manually go to your project's `android/build.gradle` and under `allprojects.repositories` add the following:
@@ -46,7 +85,7 @@ Note: In `android/app/build.gradle` I tried to set up `compile project(':react-n
 and it compiled well, but the app then crashes after running with initialize/meeting listener.
 So the above solution seems to be the best for now.
 
-#### Extra steps for iOS
+#### iOS
 
 1. In XCode, in your main project go to `General` tab, expand `Linked Frameworks and Libraries` and add the following libraries:
 * `libsqlite3.tbd`
@@ -103,36 +142,3 @@ Note: if you do not have `Copy Bundle Resources` you can add it by clicking on t
       compile project(':react-native-zoom-us')
   	```
 4. Follow [Mostly automatic installation-> Extra steps for Android](#extra-steps-for-android)
-
-
-## Usage
-```javascript
-import ZoomUs from 'react-native-zoom-us';
-
-await ZoomUs.initialize(
-  config.zoom.appKey,
-  config.zoom.appSecret,
-  config.zoom.domain
-);
-
-// Start Meeting
-await ZoomUs.startMeeting(
-  displayName,
-  meetingNo,
-  userId, // can be 'null'?
-  userType, // for pro user use 2
-  zoomAccessToken, // zak token
-  zoomToken // can be 'null'?
-
-  // NOTE: userId, userType, zoomToken should be taken from user hosting this meeting (not sure why it is required)
-  // But it works with putting only zoomAccessToken
-);
-
-// OR Join Meeting
-await ZoomUs.joinMeeting(
-  displayName,
-  meetingNo
-);
-```
-
-See demo usage of this library: https://github.com/mieszko4/react-native-zoom-us-test

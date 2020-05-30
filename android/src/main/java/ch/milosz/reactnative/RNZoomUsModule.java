@@ -7,6 +7,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import us.zoom.sdk.ZoomSDK;
 import us.zoom.sdk.ZoomError;
@@ -31,6 +34,7 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
 
   private final static String TAG = "RNZoomUs";
   private final ReactApplicationContext reactContext;
+  private final String EventMeetingStatus = "EventMeetingStatus";
 
   private Boolean isInitialized = false;
   private Promise initializePromise;
@@ -45,6 +49,18 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
   @Override
   public String getName() {
     return "RNZoomUs";
+  }
+
+  private void sendEvent(ReactApplicationContext reactContext, String eventName, WritableMap params) {
+    reactContext
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+      .emit(eventName, params);
+  }
+
+  private void sendMeetingStatusEvent(String status) {
+    WritableMap params = Arguments.createMap();
+    params.putString("status", status);
+    sendEvent(reactContext, EventMeetingStatus, params);
   }
 
   @ReactMethod
@@ -204,10 +220,11 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
               "ERR_ZOOM_MEETING",
               "Error: " + errorCode + ", internalErrorCode=" + internalErrorCode
       );
-      meetingPromise = null;
     } else if (meetingStatus == MeetingStatus.MEETING_STATUS_INMEETING) {
-      meetingPromise.resolve("Connected to zoom meeting");
-      meetingPromise = null;
+      meetingPromise.resolve("success");
+      sendMeetingStatusEvent("CONNECTED");
+    } else if (meetingStatus == MeetingStatus.MEETING_STATUS_DISCONNECTING) {
+      sendMeetingStatusEvent("DISCONNECTED");
     }
   }
 
@@ -246,6 +263,7 @@ public class RNZoomUsModule extends ReactContextBaseJavaModule implements ZoomSD
   }
   @Override
   public void onHostPause() {}
+
   @Override
   public void onHostResume() {}
 }
