@@ -14,7 +14,7 @@ await ZoomUs.initialize(
 );
 
 
-ZoomUs.removeAllListeners();
+ZoomUs.removeAllListeners(ZoomUs.eventType.MeetingStatus);
 
 ZoomUs.addListener(ZoomUs.eventType.MeetingStatus, (event) => {
   if(event.status === ZoomUs.MeetingStatus.CONNECTED) {
